@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.ksuser.km2audio" version="0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>羊羊驾考</name>
+    <description>羊羊驾考-科目二考试语音播报模拟系统v0.4</description>
+    <author email="2765301200@qq.com" href="https://www.tsginkgo.cn/tools-kqy/sss/about/">
+        Ksuserkqy
+    </author>
+    <content src="index.html" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <icon src="/static/logo/36.png" density="ldpi" />
+    <icon src="/static/logo/48.png" density="mdpi" />
+    <icon src="/static/logo/72.png" density="hdpi" />
+    <icon src="/static/logo/96.png" density="xhdpi" />
+    <icon src="/static/logo/144.png" density="xxhdpi" />
+    <icon src="/static/logo/192.png" density="xxxhdpi" />
+</widget>

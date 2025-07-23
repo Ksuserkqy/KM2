@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>羊羊驾考——科目二(C1)</title>
+    <link href="assets/style/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="assets/style/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/style/index.css">
+</head>
+<body>
+    <nav class="glass-navbar">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <a href="#" class="navbar-title">科目二(C1)</a>
+                <button class="reset-btn btn btn-primary" onclick="window.location.href=window.location.href">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                    </svg>复位
+                </button>
+            </div>
+            <div class="score-display">
+                <button type="button" id="currentScore" class="btn btn-success position-relative">
+                    100分
+                    <span id="currentScoreBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <style>
+        .card-body {
+            background-color: #FFFFFF !important;
+        }
+
+        .project-card {
+            border-radius: 14px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+        }
+        
+        .project-card-header {
+            padding: 15px 20px;
+            font-weight: 600;
+            font-size: 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* 计时器按钮样式 */
+        .timer-control {
+            font-size: 0.9rem;
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.5);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        
+        .timer-control:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: translateY(-2px);
+        }
+        
+        .timer-display {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 1.1rem;
+            min-width: 70px;
+            text-align: center;
+        }
+        
+        /* 计时器警告状态 */
+        .timer-warning {
+            color: #dc3545;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        /* 苹果风格按钮 */
+        .apple-btn {
+            border-radius: 10px;
+            padding: 8px 16px;
+            font-weight: 500;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: linear-gradient(to bottom, #fff, #f8f9fa);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+        }
+        
+        .apple-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <div class="container">
+        <div class="progress-container">
+            <div class="progress" style="height: 12px;">
+                <div class="progress-bar bg-success" id="scoreProgress" role="progressbar" style="width: 100%;" 
+                     aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+        <div class="project-card">
+            <div class="project-card-header bg-danger text-white">
+                <div><i class="fas fa-arrows-alt-h me-2"></i>1. 倒车入库</div>
+                <div class="timer-container" data-project="倒车入库" data-time="210" data-timeout-audio="audio/项目完成时间超过规定时间.mp3">
+                    <div class="timer-control">
+                        <span class="timer-display">开始计时</span>
+                        <button class="timer-action btn btn-sm btn-outline-light ms-2" style="display:none;">
+                            &#xF590;
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-center">
+                    <button class="btn btn-primary deduction-btn" data-points="10" data-audio="audio/因操作不当造成发动机熄火一次.mp3">
+                        熄火 <span class="badge bg-dark">-10</span>
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="100" data-audio="audio/启动发动机时，变速器操纵杆未置于空档.mp3">
+                        点火未空档 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="100" data-audio="audio/不释放驻车制动器起步.mp3">
+                        起步没松手刹 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/车身出线.mp3">
+                        车身出线 <span class="badge bg-dark">-100</span>
+                    </button>
+                     <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/倒库不入.mp3">
+                        倒库不入 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/车身压道路边缘线.mp3">
+                        车身压道路边缘线 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-warning deduction-btn" data-points="5" data-audio="audio/中途停车.mp3">
+                        中途停车 <span class="badge bg-dark">-5</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="project-card">
+            <div class="project-card-header bg-warning text-white">
+                <div><i class="fas fa-arrows-alt-h me-2"></i>2. 侧方停车</div>
+                <div class="timer-container" data-project="侧方停车" data-time="90" data-timeout-audio="audio/项目完成时间超过规定时间.mp3">
+                    <div class="timer-control">
+                        <span class="timer-display">开始计时</span>
+                        <button class="timer-action btn btn-sm btn-outline-light ms-2" style="display:none;">
+                            &#xF590;
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary deduction-btn" data-points="10" data-audio="audio/因操作不当造成发动机熄火一次.mp3">
+                    熄火 <span class="badge bg-dark">-10</span>
+                </button>
+                <button class="btn btn-primary deduction-btn" data-points="100" data-audio="audio/启动发动机时，变速器操纵杆未置于空档.mp3">
+                    点火未空档 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-primary deduction-btn" data-points="100" data-audio="audio/不释放驻车制动器起步.mp3">
+                    起步没松手刹 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-warning deduction-btn" data-points="10" data-audio="audio/行驶中车身触碰库位边线.mp3">
+                    行驶中车身触碰库位边线 <span class="badge bg-dark">-10</span>
+                </button>
+                <button class="btn btn-warning deduction-btn" data-points="10" data-audio="audio/行驶中车轮触轧车道边线.mp3">
+                    行驶中车轮触轧车道边线 <span class="badge bg-dark">-10</span>
+                </button>
+                <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/车辆入库停止后车身出线.mp3">
+                    车辆入库停止后车身出线 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-warning deduction-btn" data-points="10" data-audio="audio/起步前不使用左转向灯.mp3">
+                    起步前不使用左转向灯 <span class="badge bg-dark">-10</span>
+                </button>
+                <button class="btn btn-warning deduction-btn" data-points="5" data-audio="audio/中途停车.mp3">
+                    中途停车 <span class="badge bg-dark">-5</span>
+                </button>
+                <button class="btn btn-warning deduction-btn" data-points="10" data-audio="audio/后溜小于30厘米.mp3">
+                    后溜小于30厘米 <span class="badge bg-dark">-10</span>
+                </button>
+            </div>
+        </div>
+        <div class="project-card">
+            <div class="project-card-header bg-danger text-white">
+                <div><i class="fas fa-arrows-alt-h me-2"></i>7. 坡道定点停车与起步</div>
+                <div class="timer-container" data-project="坡道定点停车与起步" data-time="30" data-timeout-audio="audio/起步超时.mp3">
+                    <div class="timer-control">
+                        <span class="timer-display">开始计时</span>
+                        <button class="timer-action btn btn-sm btn-outline-light ms-2" style="display:none;">
+                            &#xF590;
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary deduction-btn" data-points="10" data-audio="audio/因操作不当造成发动机熄火一次.mp3">
+                    熄火 <span class="badge bg-dark">-10</span>
+                </button>
+                <button class="btn btn-primary deduction-btn" data-points="100" data-audio="audio/启动发动机时，变速器操纵杆未置于空档.mp3">
+                    点火未空档 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-primary deduction-btn" data-points="100" data-audio="audio/不释放驻车制动器起步.mp3">
+                    起步没松手刹 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-warning deduction-btn" data-points="5" data-audio="audio/中途停车.mp3">
+                    中途停车 <span class="badge bg-dark">-5</span>
+                </button>
+                <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/车辆行驶中骑压车道中心实线或者车道边缘实线.mp3">
+                    车辆行驶中骑压车道中心实线或者车道边缘实线 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/起步时车辆后溜距离大于30厘米.mp3">
+                    起步时车辆后溜距离大于30厘米 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/起步超时.mp3">
+                    起步超时 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-warning deduction-btn" data-points="10" data-audio="audio/车辆停止后保险杠未定于桩杆线上且前后不超出50厘米.mp3">
+                    车辆停止后保险杠未定于桩杆线上且前后不超出50厘米 <span class="badge bg-dark">-10</span>
+                </button>
+                <button class="btn btn-warning deduction-btn" data-points="10" data-audio="audio/后溜小于30厘米.mp3">
+                    后溜小于30厘米 <span class="badge bg-dark">-10</span>
+                </button>
+                <button class="btn btn-warning deduction-btn" data-points="10" data-audio="audio/停车后未拉起驻车制动器.mp3">
+                    停车后未拉起驻车制动器 <span class="badge bg-dark">-10</span>
+                </button>
+            </div>
+        </div>
+        <div class="project-card">
+            <div class="project-card-header bg-primary text-white">
+                <div><i class="fas fa-arrows-alt-h me-2"></i>8. 直角转弯</div>
+                <div class="timer-container"></div>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary deduction-btn" data-points="10" data-audio="audio/因操作不当造成发动机熄火一次.mp3">
+                    熄火 <span class="badge bg-dark">-10</span>
+                </button>
+                <button class="btn btn-primary deduction-btn" data-points="100" data-audio="audio/启动发动机时，变速器操纵杆未置于空档.mp3">
+                    点火未空档 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-primary deduction-btn" data-points="100" data-audio="audio/不释放驻车制动器起步.mp3">
+                    起步没松手刹 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-warning deduction-btn" data-points="5" data-audio="audio/中途停车.mp3">
+                    中途停车 <span class="badge bg-dark">-5</span>
+                </button>
+                <button class="btn btn-warning deduction-btn" data-points="10" data-audio="audio/转弯时不使用或错误使用转向灯.mp3">
+                    转弯时不使用或错误使用转向灯 <span class="badge bg-dark">-10</span>
+                </button>
+            </div>
+        </div>
+        <div class="project-card">
+            <div class="project-card-header bg-warning text-white">
+                <div><i class="fas fa-arrows-alt-h me-2"></i>3. 曲线行驶</div>
+                <div class="timer-container"></div>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary deduction-btn" data-points="10" data-audio="audio/因操作不当造成发动机熄火一次.mp3">
+                    熄火 <span class="badge bg-dark">-10</span>
+                </button>
+                <button class="btn btn-primary deduction-btn" data-points="100" data-audio="audio/启动发动机时，变速器操纵杆未置于空档.mp3">
+                    点火未空档 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-primary deduction-btn" data-points="100" data-audio="audio/不释放驻车制动器起步.mp3">
+                    起步没松手刹 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/车身压道路边缘线.mp3">
+                    车身压道路边缘线 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-warning deduction-btn" data-points="5" data-audio="audio/中途停车.mp3">
+                    中途停车 <span class="badge bg-dark">-5</span>
+                </button>
+            </div>
+        </div>
+        <div class="project-card">
+            <div class="project-card-header bg-primary text-white">
+                <div><i class="fas fa-arrows-alt-h me-2"></i>4. 窄路掉头</div>
+                <div class="timer-container"></div>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary deduction-btn" data-points="10" data-audio="audio/因操作不当造成发动机熄火一次.mp3">
+                    熄火 <span class="badge bg-dark">-10</span>
+                </button>
+                <button class="btn btn-primary deduction-btn" data-points="100" data-audio="audio/启动发动机时，变速器操纵杆未置于空档.mp3">
+                    点火未空档 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-primary deduction-btn" data-points="100" data-audio="audio/不释放驻车制动器起步.mp3">
+                    起步没松手刹 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/车身压道路边缘线.mp3">
+                    车身压道路边缘线 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-warning deduction-btn" data-points="10" data-audio="audio/转弯时不使用或错误使用转向灯.mp3">
+                    转弯时不使用或错误使用转向灯 <span class="badge bg-dark">-10</span>
+                </button>
+            </div>
+        </div>
+        <div class="project-card">
+            <div class="project-card-header bg-success text-white">
+                <div><i class="fas fa-arrows-alt-h me-2"></i>5. 模拟ETC</div>
+                <div class="timer-container"></div>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary deduction-btn" data-points="10" data-audio="audio/因操作不当造成发动机熄火一次.mp3">
+                    熄火 <span class="badge bg-dark">-10</span>
+                </button>
+                <button class="btn btn-primary deduction-btn" data-points="100" data-audio="audio/启动发动机时，变速器操纵杆未置于空档.mp3">
+                    点火未空档 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-primary deduction-btn" data-points="100" data-audio="audio/不释放驻车制动器起步.mp3">
+                    起步没松手刹 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/车身压道路边缘线.mp3">
+                    车身压道路边缘线 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-warning deduction-btn" data-points="5" data-audio="audio/中途停车.mp3">
+                    中途停车 <span class="badge bg-dark">-5</span>
+                </button>
+            </div>
+        </div>
+        <div class="project-card">
+            <div class="project-card-header bg-success text-white">
+                <div><i class="fas fa-arrows-alt-h me-2"></i>6. 模拟紧急情况处置</div>
+                <div class="timer-container"></div>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary deduction-btn" data-points="10" data-audio="audio/因操作不当造成发动机熄火一次.mp3">
+                    熄火 <span class="badge bg-dark">-10</span>
+                </button>
+                <button class="btn btn-primary deduction-btn" data-points="100" data-audio="audio/启动发动机时，变速器操纵杆未置于空档.mp3">
+                    点火未空档 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-primary deduction-btn" data-points="100" data-audio="audio/不释放驻车制动器起步.mp3">
+                    起步没松手刹 <span class="badge bg-dark">-100</span>
+                </button>
+                <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/车身压道路边缘线.mp3">
+                    车身压道路边缘线 <span class="badge bg-dark">-100</span>
+                </button>
+            </div>
+        </div>
+        
+        <button id="endExamBtn" class="btn btn-danger end-exam-btn">
+            <i class="bi bi-flag-fill"></i>考试结束
+        </button>
+    </div>
+    <div class="bottom-navbar">
+        <div class="nav-item active" data-target="index">
+            <i class="bi bi-2-square-fill"></i>
+            科目二
+        </div>
+        <div class="nav-item" data-target="km3">
+            <i class="bi bi-3-square-fill"></i>
+            科目三
+        </div>
+        <div class="nav-item" data-target="profile">
+            <i class="bi bi-person-fill"></i>
+            我的
+        </div>
+    </div>
+
+    <script src="assets/scripts/bootstrap.bundle.min.js"></script>
+    <script>
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.documentElement.setAttribute('data-bs-theme', 'dark');
+        }
+
+        // 初始化分数和记录
+        let totalScore = 100;
+        let deductionRecords = []; // 记录扣分项目
+        const timers = {};
+        const timerTemplate = {
+            project: '',
+            timeLimit: 0, // 自定义时间限制
+            elapsed: 0,
+            timerId: null,
+            status: 'idle' // idle, running, stopped
+        };
+        
+        // 初始化项目计时器
+        function initTimers() {
+            document.querySelectorAll('.timer-container').forEach(container => {
+                const project = container.dataset.project;
+                const timeLimit = parseInt(container.dataset.time);
+                const timeoutAudio = container.dataset.timeoutAudio;
+                
+                timers[project] = {
+                    ...timerTemplate, 
+                    project,
+                    timeLimit,
+                    timeoutAudio
+                };
+                
+                // 添加点击事件
+                const timerDisplay = container.querySelector('.timer-display');
+                const timerAction = container.querySelector('.timer-action');
+                
+                if (timerDisplay && timerAction) {
+                    timerDisplay.addEventListener('click', () => {
+                        if (timers[project].status === 'idle') {
+                            new Audio(`audio/${timers[project].project}.mp3`).play();
+                            startTimer(project);
+                        } else if (timers[project].status === 'running') {
+                            new Audio("audio/该项目结束.mp3").play();
+                            stopTimer(project);
+                        }
+                    });
+                    
+                    timerAction.addEventListener('click', () => {
+                        if (timers[project].status === 'running') {
+                            new Audio("audio/该项目结束.mp3").play();
+                            stopTimer(project);
+                        } else if (timers[project].status === 'stopped') {
+                            resetTimer(project);
+                        }
+                    });
+                }
+            });
+        }
+
+        function startTimer(project) {
+            const timer = timers[project];
+            timer.status = 'running';
+            timer.elapsed = 0;
+            
+            const container = document.querySelector(`.timer-container[data-project="${project}"]`);
+            const timerDisplay = container.querySelector('.timer-display');
+            const timerAction = container.querySelector('.timer-action');
+            
+            // 更新UI
+            timerDisplay.textContent = formatTime(timer.timeLimit - timer.elapsed);
+            timerDisplay.classList.remove('timer-warning');
+            timerAction.style.display = 'inline-block';
+            timerAction.innerHTML = '<i class="bi bi-square-fill"></i>';
+            timerAction.classList.replace('btn-outline-light', 'btn-outline-danger');
+            
+            // 启动计时器
+            timer.timerId = setInterval(() => {
+                timer.elapsed++;
+                
+                // 更新显示
+                const remaining = timer.timeLimit - timer.elapsed;
+                timerDisplay.textContent = formatTime(remaining);
+                
+                // 最后10秒警告
+                if (remaining <= 10) {
+                    timerDisplay.classList.add('timer-warning');
+                }
+                
+                // 超时处理
+                if (remaining <= 0) {
+                    clearInterval(timer.timerId);
+                    timerDisplay.textContent = '超时!';
+                    
+                    // 超时扣100分
+                    if (timer.status !== 'stopped') {
+                        timer.status = 'stopped';
+                        timerAction.innerHTML = '<i class="bi bi-arrow-left-square-fill"></i>';
+                        timerAction.classList.replace('btn-outline-danger', 'btn-outline-secondary');
+
+                        const points = 100;
+                        const audioFile = timers[project].timeoutAudio;
+                        totalScore -= points;
+                        deductionRecords.push({
+                            project: timers[project].project + "项目超时",
+                            points: 100,
+                            audio: audioFile,
+                            description: "项目超时"
+                        });
+                        
+                        // 更新分数显示
+                        updateScoreDisplay();
+                        
+                        // 播放扣分语音
+                        const audio = new Audio(audioFile);
+                        audio.play().catch(e => {
+                            console.log("语音播放失败，请检查文件路径:", e);
+                            // 模拟语音提示
+                            alert(`${timers[project].project}项目超时，扣100分`);
+                        });
+
+
+
+
+
+
+                    }
+                }
+            }, 1000);
+        }
+        
+        // 停止计时
+        function stopTimer(project) {
+            const timer = timers[project];
+            if (timer.status !== 'running') return;
+            
+            clearInterval(timer.timerId);
+            timer.status = 'stopped';
+            
+            const container = document.querySelector(`.timer-container[data-project="${project}"]`);
+            const timerDisplay = container.querySelector('.timer-display');
+            const timerAction = container.querySelector('.timer-action');
+            
+            // 更新UI
+            timerDisplay.classList.remove('timer-warning');
+            timerAction.innerHTML = '<i class="bi bi-arrow-left-square-fill"></i>';
+            timerAction.classList.replace('btn-outline-danger', 'btn-outline-secondary');
+            
+            // 检查是否超时
+            const remaining = timer.timeLimit - timer.elapsed;
+            if (remaining <= 0) {
+                timerDisplay.textContent = '超时!';
+                if (!timer.hasPenalty) {
+                    deductPoints(100, `${project}超时`, `audio/timeout.mp3`);
+                    timer.hasPenalty = true;
+                }
+            } else {
+                timerDisplay.textContent = formatTime(timer.elapsed) + ' / ' + formatTime(timer.timeLimit);
+            }
+        }
+        
+        // 复位计时器
+        function resetTimer(project) {
+            const timer = timers[project];
+            clearInterval(timer.timerId);
+            
+            const container = document.querySelector(`.timer-container[data-project="${project}"]`);
+            const timeLimit = parseInt(container.dataset.time);
+            const timeoutAudio = container.dataset.timeoutAudio;
+            
+            timers[project] = {
+                ...timerTemplate, 
+                project,
+                timeLimit,
+                timeoutAudio
+            };
+            
+            const timerDisplay = container.querySelector('.timer-display');
+            const timerAction = container.querySelector('.timer-action');
+            
+            // 更新UI
+            timerDisplay.textContent = '开始计时';
+            timerDisplay.classList.remove('timer-warning');
+            timerAction.style.display = 'none';
+        }
+        
+        // 格式化时间显示 (秒转MM:SS)
+        function formatTime(seconds) {
+            const mins = Math.floor(Math.abs(seconds) / 60);
+            const secs = Math.abs(seconds) % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+        
+
+        // 更新分数显示
+        function updateScoreDisplay() {
+            if (totalScore == 100) {
+                document.getElementById('currentScore').innerHTML = totalScore + '分';
+            } else {
+                document.getElementById('currentScore').innerHTML = totalScore + '分<span id="currentScoreBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>';
+            }
+            const progressBar = document.getElementById('scoreProgress');
+            progressBar.style.width = Math.max(totalScore, 0) + '%';
+
+            // 根据分数改变颜色
+            const scoreElement = document.getElementById('currentScore');
+            if (totalScore >= 100) {
+                scoreElement.className = 'btn btn-success position-relative';
+                progressBar.className = 'progress-bar bg-success';
+            } else if (totalScore >= 90) {
+                scoreElement.className = 'btn btn-primary position-relative';
+                progressBar.className = 'progress-bar bg-primary';
+            } else if (totalScore >= 80) {
+                scoreElement.className = 'btn btn-warning position-relative';
+                progressBar.className = 'progress-bar bg-warning';
+            } else {
+                scoreElement.className = 'btn btn-danger position-relative';
+                progressBar.className = 'progress-bar bg-danger';
+            }
+            
+            // 更新进度条
+            
+
+            const currentBadge = document.getElementById("currentScoreBadge");
+            if (deductionRecords.length == 0 && currentBadge) {
+                currentBadge.style.display = 'inline';
+            } else if (currentBadge) {
+                currentBadge.style.visibility = 'visible';
+                currentBadge.textContent = deductionRecords.length;
+            }
+        }
+        
+        // 扣分按钮事件处理
+        document.querySelectorAll('.deduction-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // 获取扣分值和语音文件
+                const points = parseInt(this.dataset.points);
+                const audioFile = this.dataset.audio;
+                
+                // 扣分
+                totalScore -= points;
+                
+                // 记录扣分项目
+                deductionRecords.push({
+                    project: this.closest('.project-card').querySelector('.project-card-header').textContent.trim(),
+                    points: points,
+                    audio: audioFile,
+                    description: this.textContent.trim()
+                });
+                
+                // 更新分数显示
+                updateScoreDisplay();
+                
+                // 播放扣分语音
+                const audio = new Audio(audioFile);
+                audio.play().catch(e => {
+                    console.log("语音播放失败，请检查文件路径:", e);
+                    // 模拟语音提示
+                    alert(`${this.textContent.trim()}，扣${points}分！`);
+                });
+            });
+        });
+        
+        // 考试结束按钮事件处理
+        document.getElementById('endExamBtn').addEventListener('click', async function() {
+            this.disabled = true;
+            this.innerHTML = '<i class="bi bi-hourglass-split"></i>&nbsp;正在播放扣分项目...';
+
+            const success = new Audio("audio/成绩合格.mp3");
+            const failure = new Audio("audio/考试不合格.mp3");
+            
+            if (deductionRecords.length === 0) {
+                // alert("考试通过！没有扣分项目");
+                success.play();
+                this.innerHTML = '<i class="bi bi-check-circle-fill"></i>&nbsp;考试结束';
+                this.disabled = false;
+                return;
+            }
+            
+            // 按顺序播放所有扣分语音
+            if (totalScore >= 80) {
+                success.play();
+                const btn = document.getElementById('endExamBtn');
+                btn.innerHTML = '<i class="bi bi-exclamation-triangle-fill"></i>&nbsp;考试结束';
+                btn.disabled = false;
+                
+                // 显示最终结果
+                const result = totalScore >= 80 ? "考试合格" : "考试不合格";
+                const resultClass = totalScore >= 80 ? "alert-success" : "alert-danger";
+                
+                // 创建结果弹窗
+                const resultAlert = document.createElement('div');
+                resultAlert.className = `alert ${resultClass} alert-dismissible fade show position-fixed top-50 start-50 translate-middle`;
+                resultAlert.style.zIndex = '1050';
+                resultAlert.style.width = '90%';
+                resultAlert.style.maxWidth = '600px';
+                resultAlert.innerHTML = `
+                    <h4 class="alert-heading">考试结束</h4>
+                    <p>最终得分: <strong>${totalScore}</strong> 分</p>
+                    <p>考试结果: <strong>${result}</strong></p>
+                    <hr>
+                    <p class="mb-0">扣分项目总数: ${deductionRecords.length} 项</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                `;
+                
+                document.body.appendChild(resultAlert);
+                
+                // 使用Bootstrap的alert功能
+                new bootstrap.Alert(resultAlert);
+            } else {
+                deductionRecords.unshift({projest: "0. 监管系统回应", audio: "audio/考试不合格.mp3"});
+                let index = 0;
+                function playNext() {
+                    if (index < deductionRecords.length) {
+                        const record = deductionRecords[index];
+                        const audio = new Audio(record.audio);
+                        
+                        audio.play().catch(e => {
+                            console.log("语音播放失败，请检查文件路径:", e);
+                            // 模拟语音提示
+                            alert(`${record.description}，扣${record.points}分！`);
+                            setTimeout(playNext, 1500);
+                        });
+                        
+                        audio.onended = function() {
+                            index++;
+                            setTimeout(playNext, 1); // 语音间短暂间隔
+                        };
+                    } else {
+                        // 所有语音播放完毕
+                        deductionRecords = deductionRecords.slice(1);
+                        const btn = document.getElementById('endExamBtn');
+                        btn.innerHTML = '<i class="bi bi-x-square"></i>&nbsp;考试结束';
+                        btn.disabled = false;
+                        
+                        // 显示最终结果
+                        const result = totalScore >= 80 ? "考试合格" : "考试不合格";
+                        const resultClass = totalScore >= 80 ? "alert-success" : "alert-danger";
+                        
+                        // 创建结果弹窗
+                        const resultAlert = document.createElement('div');
+                        resultAlert.className = `alert ${resultClass} alert-dismissible fade show position-fixed top-50 start-50 translate-middle`;
+                        resultAlert.style.zIndex = '1050';
+                        resultAlert.style.width = '90%';
+                        resultAlert.style.maxWidth = '600px';
+                        resultAlert.innerHTML = `
+                            <h4 class="alert-heading">考试结束</h4>
+                            <p>最终得分: <strong>${totalScore}</strong> 分</p>
+                            <p>考试结果: <strong>${result}</strong></p>
+                            <hr>
+                            <p class="mb-0">扣分项目总数: ${deductionRecords.length} 项</p>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        `;
+                        
+                        document.body.appendChild(resultAlert);
+                        
+                        // 使用Bootstrap的alert功能
+                        new bootstrap.Alert(resultAlert);
+                    }
+                }
+            }
+            
+            playNext();
+        });
+        
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const target = this.dataset.target;
+                window.location.href = target + ".html";
+            });
+        });
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            updateScoreDisplay();
+            initTimers();
+            updateScoreDisplay();
+        })
+    </script>
+</body>
+</html>

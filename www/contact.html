@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>羊羊驾考——联系我</title>
+    <link href="assets/style/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="assets/style/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/style/index.css">
+    <style>
+        /* 顶部固定栏 */
+        .header-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(135deg, #89CFF0, #0d6efd);
+            color: white;
+            padding: 15px 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* 避免内容被顶部固定栏遮挡 */
+        body {
+            padding-top: 100px;
+            /* background: linear-gradient(135deg, #f5f7fa, #e4e7f1); */
+            min-height: 100vh;
+        }
+        
+        /* 主容器 */
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 50px;
+        }
+        
+        /* 联系卡片样式 */
+        .contact-card {
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+            /* box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); */
+        }
+        
+        .contact-card-header {
+            padding: 15px 20px;
+            font-weight: 600;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, #89CFF0, #0d6efd);
+            color: white;
+        }
+        
+        /* 二维码样式 */
+        .qr-code {
+            width: 220px;
+            margin: 20px auto;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .qr-code::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            /* background: linear-gradient(90deg, #2c3e50, #4a6491, #2c3e50); */
+        }
+        
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        /* 联系信息样式 */
+        .contact-info {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .contact-info h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 12px 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .contact-icon {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #4a6491, #2c3e50);
+            color: white;
+            border-radius: 50%;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .contact-detail {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .contact-detail h5 {
+            margin: 0;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .contact-detail p {
+            margin: 5px 0 0;
+            color: #6c757d;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .header-bar {
+                padding: 10px 0;
+            }
+            body {
+                padding-top: 80px;
+            }
+            .contact-container {
+                padding: 20px;
+            }
+            .qr-code {
+                width: 180px;
+                height: 180px;
+            }
+        }
+        
+        /* 底部样式 */
+        .footer {
+            background: linear-gradient(135deg, #2c3e50, #1a2533);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+        
+        .social-icons {
+            margin: 20px 0;
+        }
+        
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            margin: 0 8px;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9的比例 (9/16 = 0.5625) */
+            height: 0;
+            overflow: hidden;
+            max-width: 1280px; /* 720P视频的宽度 */
+            margin: 0 auto;
+        }
+        
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-color: #000;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部固定栏 -->
+    <div class="header-bar">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="mb-0">
+                        <a style="text-align: right; right: 0; color: white;" href="profile.html"><i class="bi bi-arrow-left-square-fill"></i></a>&nbsp;联系我
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container contact-container">
+        <!-- 微信二维码卡片 -->
+        <div class="contact-card">
+            <div class="contact-card-header">
+                <i class="bi bi-wechat"></i>微信联系
+            </div>
+            <div class="card-body">
+                <div class="contact-info">
+                    <h3>扫描二维码添加微信</h3>
+                    <div class="qr-code qr-container mb-4" id="qrContainer">
+                        <!-- 这里可以替换为实际的二维码图片 -->
+                        <img src="assets/images/wechat.png" alt="微信二维码">
+                    </div>
+                    <p class="mt-3 text-muted">扫描上方二维码，或搜索微信号: <strong>KsuserKqy</strong></p>
+                    <p class="mt-3 text-muted"><a href="https://www.tsginkgo.cn/tools-kqy/sss/about/" target="_blank">其他联系方式</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-navbar">
+        <div class="nav-item" data-target="index">
+            <i class="bi bi-2-square-fill"></i>
+            科目二
+        </div>
+        <div class="nav-item" data-target="km3">
+            <i class="bi bi-3-square-fill"></i>
+            科目三
+        </div>
+        <div class="nav-item active" data-target="profile">
+            <i class="bi bi-person-fill"></i>
+            我的
+        </div>
+    </div>
+
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="videoModalLabel">展开</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- 16:9比例的视频容器 -->
+                    <div class="video-container">
+                        <!-- 视频元素 - 720P (1280x720) 16:9比例 -->
+                        <video id="videoPlayer" controls poster="assets/video/nsh.jpg">
+                            <!-- 这里替换为您的720P视频源 -->
+                            <source src="#" type="video/mp4">
+                            您的手机不支持视频播放，请<a href="https://www.bilibili.com/video/BV16p4y1s7ex/" target="_blank">点我前往浏览器查看</a>
+                        </video>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS 和依赖 -->
+    <script src="assets/scripts/bootstrap.bundle.min.js"></script>
+    <script>
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.documentElement.setAttribute('data-bs-theme', 'dark');
+        }
+
+        const qrContainer = document.getElementById('qrContainer');
+        // const clickIndicator = document.getElementById('clickIndicator');
+        const videoModal = new bootstrap.Modal(document.getElementById('videoModal'));
+        const videoPlayer = document.getElementById('videoPlayer');
+        
+        // 连续点击配置
+        const REQUIRED_CLICKS = 3; // 需要连续点击的次数
+        const TIME_WINDOW = 1000; // 点击时间窗口(毫秒)
+        
+        // 点击跟踪变量
+        let clickTimes = [];
+        let clickCount = 0;
+        
+        // 设置视频源 (替换为您的720P视频URL)
+        const videoSource = "assets/video/展开.mp4";
+        videoPlayer.querySelector('source').src = videoSource;
+        
+        // 二维码点击事件处理
+        qrContainer.addEventListener('click', function() {
+            const now = Date.now();
+            
+            // 记录当前点击时间
+            clickTimes.push(now);
+            
+            // 移除时间窗口外的点击记录
+            clickTimes = clickTimes.filter(time => now - time <= TIME_WINDOW);
+            
+            // 更新点击计数
+            clickCount = clickTimes.length;
+            
+            // 3秒后隐藏点击指示器
+            setTimeout(() => {
+                clickIndicator.classList.remove('show');
+            }, 3000);
+            
+            // 检查是否达到连续点击要求
+            if (clickCount >= REQUIRED_CLICKS) {
+                // 重置点击计数
+                clickTimes = [];
+                clickCount = 0;
+                
+                // 显示模态框并播放视频
+                videoModal.show();
+                
+                // 视频加载完成后播放
+                videoPlayer.load();
+                videoPlayer.play().catch(error => {
+                    console.log('自动播放失败，可能是浏览器限制:', error);
+                });
+            }
+        });
+        
+        // 当模态框关闭时暂停视频
+        videoModal._element.addEventListener('hidden.bs.modal', function() {
+            videoPlayer.pause();
+        });
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const target = this.dataset.target;
+                window.location.href = target + ".html";
+            });
+        });
+    </script>
+</body>
+</html>

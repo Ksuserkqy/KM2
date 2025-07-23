@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>羊羊驾考——科目三(C1)</title>
+    <link href="assets/style/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="assets/style/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/style/index.css">
+    <style>
+        .card-body {
+            background-color: #FFFFFF !important;
+        }
+    </style>
+</head>
+<body>
+    <nav class="glass-navbar">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <a href="#" class="navbar-title">科目三(C1)</a>
+                <button class="reset-btn btn btn-primary" onclick="window.location.href=window.location.href">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                    </svg>复位
+                </button>
+            </div>
+            <div class="score-display">
+                <button type="button" id="currentScore" class="btn btn-success position-relative">
+                    100分
+                    <span id="currentScoreBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="progress-container">
+            <div class="progress" style="height: 12px;">
+                <div class="progress-bar bg-success" id="scoreProgress" role="progressbar" style="width: 100%;" 
+                     aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+        <div class="project-card">
+            <div class="project-card-header bg-warning text-white">
+                <i class="fas fa-arrows-alt-h me-2"></i>0.5. 灯光模拟
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-center">
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/light/灯光开始.mp3">
+                        灯光开始
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/light/灯光完成.mp3">
+                        灯光完成
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/light/请开启前照灯.mp3">
+                        请开启前照灯 <span class="badge bg-light text-dark">近光灯</span>
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/light/同方向近距离跟车行驶.mp3">
+                        同方向近距离跟车行驶 <span class="badge bg-light text-dark">近光灯</span>
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/light/夜间通过急弯.mp3">
+                        急弯 <span class="badge bg-light text-dark">远近光灯交替</span>
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/light/夜间通过坡路.mp3">
+                        坡路 <span class="badge bg-light text-dark">远近光灯交替</span>
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/light/夜间通过坡路.mp3">
+                        拱桥 <span class="badge bg-light text-dark">远近光灯交替</span>
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/light/通过人行横道.mp3">
+                        人行横道 <span class="badge bg-light text-dark">远近光灯交替</span>
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/light/夜间通过没有交通信号灯控制的路口.mp3">
+                        没有交通信号灯控制的路口 <span class="badge bg-light text-dark">远近光灯交替</span>
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/light/与机动车会车.mp3">
+                        与机动车会车 <span class="badge bg-light text-dark">近光灯</span>
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/light/通过交通信号灯控制的路口.mp3">
+                        通过交通信号灯控制的路口 <span class="badge bg-light text-dark">近光灯</span>
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/light/夜间超越前方车辆.mp3">
+                        超越前方车辆 <span class="badge bg-light text-dark">左转灯-远近光灯交替-右转灯</span>
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/light/夜间在没有路灯照明不良条件下行驶.mp3">
+                        在照明不良的道路行驶 <span class="badge bg-light text-dark">远光灯</span>
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/light/在无照明的道路行驶.mp3">
+                        在无照明的道路行驶 <span class="badge bg-light text-dark">远光灯</span>
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/light/在有路灯照明良好的道路上行驶.mp3">
+                        在有路灯、照明良好的道路行驶 <span class="badge bg-light text-dark">近光灯</span>
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/light/路边临时停车.mp3">
+                        路边临时停车 <span class="badge bg-light text-dark">示廓灯+双闪</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/light/不能正确使用灯光.mp3">
+                        不能正确使用灯光 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/light/不能正确开启近光灯.mp3">
+                        不能正确开启近光灯 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/light/不交替使用远近光灯示意.mp3">
+                        不交替使用远近光灯示意 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/请起步，继续完成考试.mp3">
+                        继续考试
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="project-card">
+            <div class="project-card-header bg-danger text-white">
+                <i class="fas fa-arrows-alt-h me-2"></i>1. 起步
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-center">
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/左前方有学员通过.mp3">
+                        左前方有学员通过
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/右后方有学员通过.mp3">
+                        右后方有学员通过
+                    </button>
+                    <button class="btn btn-warning deduction-btn" data-points="10" data-audio="audio/因操作不当造成发动机熄火一次.mp3">
+                        熄火 <span class="badge bg-dark">-10</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/启动发动机时，变速器操纵杆未置于空档.mp3">
+                        点火未空档 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/不释放驻车制动器起步.mp3">
+                        起步没松手刹 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-warning deduction-btn" data-points="10" data-audio="audio/km3/具备起步条件但十秒未起步.mp3">
+                        具备起步条件但十秒未起步 <span class="badge bg-dark">-10</span>
+                    </button>
+                    <button class="btn btn-warning deduction-btn" data-points="5" data-audio="audio/km3/起步时车辆发生闯动.mp3">
+                        起步时车辆发生闯动 <span class="badge bg-dark">-5</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100"c data-audio="audio/km3/起步前未使用或错误使用转向灯.mp3">
+                        起步前未使用或错误使用转向灯 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100"c data-audio="audio/km3/车门未关闭起步.mp3">
+                        车门未关闭起步 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/车辆行驶中骑压车道中心实线或者车道边缘实线.mp3">
+                        车辆行驶中骑压车道中心实线或者车道边缘实线 <span class="badge bg-dark">-100</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="project-card">
+            <div class="project-card-header bg-danger text-white">
+                <i class="fas fa-arrows-alt-h me-2"></i>2. 直线行驶
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-center">
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/请保持直线行驶.mp3">
+                        请保持直线行驶
+                    </button>
+                    <button class="btn btn-warning deduction-btn" data-points="10" data-audio="audio/km3/使用档位与车速长时间不匹配.mp3">
+                        使用档位与车速长时间不匹配 <span class="badge bg-dark">-10</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/发动机转速过高.mp3">
+                        发动机转速过高 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/长时间使用离合踏板.mp3">
+                        长时间使用离合踏板 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/长时间使用一档.mp3">
+                        长时间使用一档 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/方向控制不稳.mp3">
+                        方向控制不稳 <span class="badge bg-dark">-100</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+         <div class="project-card">
+            <div class="project-card-header bg-primary text-white">
+                <i class="fas fa-arrows-alt-h me-2"></i>3. 超越前方车辆
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-center">
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/请超越前方车辆.mp3">
+                        请超越前方车辆
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/请返回原车道.mp3">
+                        请返回原车道
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/超车前不使用或错误使用转向灯.mp3">
+                        超车前不使用或错误使用转向灯 <span class="badge bg-dark">-100</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+         <div class="project-card">
+            <div class="project-card-header bg-success text-white">
+                <i class="fas fa-arrows-alt-h me-2"></i>4. 经过学校
+            </div>
+            <div class="card-body">
+                <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/不按规定减速慢行.mp3">
+                    不按规定减速慢行 <span class="badge bg-dark">-100</span>
+                </button>
+            </div>
+        </div>
+         <div class="project-card">
+            <div class="project-card-header bg-danger text-white">
+                <i class="fas fa-arrows-alt-h me-2"></i>5. 加减档路段
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-center">
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/前方路口右转.mp3">
+                        前方路口右转
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/通过路口前未减速慢行.mp3">
+                        通过路口前未减速慢行 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-warning deduction-btn" data-points="10" data-audio="audio/km3/错误使用档位.mp3">
+                        错误使用档位 <span class="badge bg-dark">-10</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/发动机转速过高.mp3">
+                        发动机转速过高 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/长时间使用离合踏板.mp3">
+                        长时间使用离合踏板 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/长时间使用一档.mp3">
+                        长时间使用一档 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/车辆行驶中骑压车道中心实线或者车道边缘实线.mp3">
+                        车辆行驶中骑压车道中心实线或者车道边缘实线 <span class="badge bg-dark">-100</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+         <div class="project-card">
+            <div class="project-card-header bg-success text-white">
+                <i class="fas fa-arrows-alt-h me-2"></i>6. 公交车站
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-center">
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/前方路口直行.mp3">
+                        前方路口直行
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/通过路口前未减速慢行.mp3">
+                        通过路口前未减速慢行 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/不按规定减速慢行.mp3">
+                        不按规定减速慢行 <span class="badge bg-dark">-100</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+         <div class="project-card">
+            <div class="project-card-header bg-warning text-white">
+                <i class="fas fa-arrows-alt-h me-2"></i>7. 掉头
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-center">
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/前方路口左转.mp3">
+                        前方路口左转
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/前方路口直行.mp3">
+                        前方路口直行
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/前方路口右转.mp3">
+                        前方路口右转
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/通过路口前未减速慢行.mp3">
+                        通过路口前未减速慢行 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/变更车道前不使用或错误使用转向灯.mp3">
+                        变更车道前不使用或错误使用转向灯 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/前方请选择合适地点掉头.mp3">
+                        前方掉头
+                    </button>
+                    <button class="btn btn-warning deduction-btn" data-points="10" data-audio="audio/km3/错误使用档位.mp3">
+                        错误使用档位 <span class="badge bg-dark">-10</span>
+                    </button> 
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/车辆行驶中骑压车道中心实线或者车道边缘实线.mp3">
+                        车辆行驶中骑压车道中心实线或者车道边缘实线 <span class="badge bg-dark">-100</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+         <div class="project-card">
+            <div class="project-card-header bg-warning text-white">
+                <i class="fas fa-arrows-alt-h me-2"></i>8. 靠边停车
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-center">
+                    <button class="btn btn-primary deduction-btn" data-points="0" data-audio="audio/km3/请靠边停车.mp3">
+                        请靠边停车
+                    </button>
+                    <button class="btn btn-warning deduction-btn" data-points="5" data-audio="audio/km3/下车前不将发动机熄火.mp3">
+                        下车前不将发动机熄火 <span class="badge bg-dark">-5</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/停车前不使用或错误使用转向灯.mp3">
+                        停车前不使用或错误使用转向灯 <span class="badge bg-dark">-100</span>
+                    </button>
+                    <button class="btn btn-danger deduction-btn" data-points="100" data-audio="audio/km3/车辆行驶中骑压车道中心实线或者车道边缘实线.mp3">
+                        车辆行驶中骑压车道中心实线或者车道边缘实线 <span class="badge bg-dark">-100</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        </div>
+        <button id="endExamBtn" class="btn btn-danger end-exam-btn">
+            <i class="bi bi-flag-fill"></i>考试结束
+        </button>
+    </div>
+    <div class="bottom-navbar">
+        <div class="nav-item" data-target="index">
+            <i class="bi bi-2-square-fill"></i>
+            科目二
+        </div>
+        <div class="nav-item active" data-target="km3">
+            <i class="bi bi-3-square-fill"></i>
+            科目三
+        </div>
+        <div class="nav-item" data-target="profile">
+            <i class="bi bi-person-fill"></i>
+            我的
+        </div>
+    </div>
+
+    <script src="assets/scripts/bootstrap.bundle.min.js"></script>
+    <script>
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.documentElement.setAttribute('data-bs-theme', 'dark');
+        }
+
+        // 初始化分数和记录
+        let totalScore = 100;
+        let deductionRecords = []; // 记录扣分项目
+        
+        // 更新分数显示
+        function updateScoreDisplay() {
+            if (totalScore == 100) {
+                document.getElementById('currentScore').innerHTML = totalScore + '分';
+            } else {
+                document.getElementById('currentScore').innerHTML = totalScore + '分<span id="currentScoreBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>';
+            }
+            const progressBar = document.getElementById('scoreProgress');
+            progressBar.style.width = Math.max(totalScore, 0) + '%';
+
+            // 根据分数改变颜色
+            const scoreElement = document.getElementById('currentScore');
+            if (totalScore >= 100) {
+                scoreElement.className = 'btn btn-success position-relative';
+                progressBar.className = 'progress-bar bg-success';
+            } else if (totalScore >= 90) {
+                scoreElement.className = 'btn btn-primary position-relative';
+                progressBar.className = 'progress-bar bg-primary';
+            } else if (totalScore >= 80) {
+                scoreElement.className = 'btn btn-warning position-relative';
+                progressBar.className = 'progress-bar bg-warning';
+            } else {
+                scoreElement.className = 'btn btn-danger position-relative';
+                progressBar.className = 'progress-bar bg-danger';
+            }
+            
+            // 更新进度条
+            
+
+            const currentBadge = document.getElementById("currentScoreBadge");
+            if (deductionRecords.length == 0 && currentBadge) {
+                currentBadge.style.display = 'inline';
+            } else if (currentBadge) {
+                currentBadge.style.visibility = 'visible';
+                currentBadge.textContent = deductionRecords.length;
+            }
+        }
+        
+        // 扣分按钮事件处理
+        document.querySelectorAll('.deduction-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // 获取扣分值和语音文件
+                const points = parseInt(this.dataset.points);
+                const audioFile = this.dataset.audio;
+                
+                // 扣分
+                totalScore -= points;
+                
+                if (points !== 0) {
+                    // 记录扣分项目
+                    deductionRecords.push({
+                        project: this.closest('.project-card').querySelector('.project-card-header').textContent.trim(),
+                        points: points,
+                        audio: audioFile,
+                        description: this.textContent.trim()
+                    });
+                }
+                
+                // 更新分数显示
+                updateScoreDisplay();
+                
+                // 播放扣分语音
+                const audio = new Audio(audioFile);
+                audio.play().catch(e => {
+                    console.log("语音播放失败，请检查文件路径:", e);
+                    // 模拟语音提示
+                    alert(`${this.textContent.trim()}，扣${points}分！`);
+                });
+            });
+        });
+        
+        document.getElementById('endExamBtn').addEventListener('click', async function() {
+            this.disabled = true;
+            this.innerHTML = '<i class="bi bi-hourglass-split"></i>&nbsp;正在播放扣分项目...';
+
+            const success = new Audio("audio/成绩合格.mp3");
+            const failure = new Audio("audio/考试不合格.mp3");
+            
+            if (deductionRecords.length === 0) {
+                // alert("考试通过！没有扣分项目");
+                success.play();
+                this.innerHTML = '<i class="bi bi-check-circle-fill"></i>&nbsp;考试结束';
+                this.disabled = false;
+                return;
+            }
+            
+            // 按顺序播放所有扣分语音
+            if (totalScore >= 80) {
+                success.play();
+                const btn = document.getElementById('endExamBtn');
+                btn.innerHTML = '<i class="bi bi-exclamation-triangle-fill"></i>&nbsp;考试结束';
+                btn.disabled = false;
+                
+                // 显示最终结果
+                const result = totalScore >= 80 ? "考试合格" : "考试不合格";
+                const resultClass = totalScore >= 80 ? "alert-success" : "alert-danger";
+                
+                // 创建结果弹窗
+                const resultAlert = document.createElement('div');
+                resultAlert.className = `alert ${resultClass} alert-dismissible fade show position-fixed top-50 start-50 translate-middle`;
+                resultAlert.style.zIndex = '1050';
+                resultAlert.style.width = '90%';
+                resultAlert.style.maxWidth = '600px';
+                resultAlert.innerHTML = `
+                    <h4 class="alert-heading">考试结束</h4>
+                    <p>最终得分: <strong>${totalScore}</strong> 分</p>
+                    <p>考试结果: <strong>${result}</strong></p>
+                    <hr>
+                    <p class="mb-0">扣分项目总数: ${deductionRecords.length} 项</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                `;
+                
+                document.body.appendChild(resultAlert);
+                
+                // 使用Bootstrap的alert功能
+                new bootstrap.Alert(resultAlert);
+            } else {
+                deductionRecords.unshift({projest: "0. 监管系统回应", audio: "audio/考试不合格.mp3"});
+                let index = 0;
+                function playNext() {
+                    if (index < deductionRecords.length) {
+                        const record = deductionRecords[index];
+                        const audio = new Audio(record.audio);
+                        
+                        audio.play().catch(e => {
+                            console.log("语音播放失败，请检查文件路径:", e);
+                            // 模拟语音提示
+                            alert(`${record.description}，扣${record.points}分！`);
+                            setTimeout(playNext, 1500);
+                        });
+                        
+                        audio.onended = function() {
+                            index++;
+                            setTimeout(playNext, 1); // 语音间短暂间隔
+                        };
+                    } else {
+                        // 所有语音播放完毕
+                        deductionRecords = deductionRecords.slice(1);
+                        const btn = document.getElementById('endExamBtn');
+                        btn.innerHTML = '<i class="bi bi-x-square"></i>&nbsp;考试结束';
+                        btn.disabled = false;
+                        
+                        // 显示最终结果
+                        const result = totalScore >= 80 ? "考试合格" : "考试不合格";
+                        const resultClass = totalScore >= 80 ? "alert-success" : "alert-danger";
+                        
+                        // 创建结果弹窗
+                        const resultAlert = document.createElement('div');
+                        resultAlert.className = `alert ${resultClass} alert-dismissible fade show position-fixed top-50 start-50 translate-middle`;
+                        resultAlert.style.zIndex = '1050';
+                        resultAlert.style.width = '90%';
+                        resultAlert.style.maxWidth = '600px';
+                        resultAlert.innerHTML = `
+                            <h4 class="alert-heading">考试结束</h4>
+                            <p>最终得分: <strong>${totalScore}</strong> 分</p>
+                            <p>考试结果: <strong>${result}</strong></p>
+                            <hr>
+                            <p class="mb-0">扣分项目总数: ${deductionRecords.length} 项</p>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        `;
+                        
+                        document.body.appendChild(resultAlert);
+                        
+                        // 使用Bootstrap的alert功能
+                        new bootstrap.Alert(resultAlert);
+                    }
+                }
+            }
+            
+            playNext();
+        });
+        
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const target = this.dataset.target;
+                window.location.href = target + ".html";
+            });
+        });
+
+        // 初始化页面
+        updateScoreDisplay();
+    </script>
+</body>
+</html>

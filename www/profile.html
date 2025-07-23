@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>羊羊驾考——我的</title>
+    <link href="assets/style/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="assets/style/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/style/index.css">
+    <style>
+        /* 基础样式 */
+        body {
+            padding-top: 0 !important;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+        }
+        
+        /* 个人信息区域样式 */
+        .profile-header {
+            padding: 2rem 1rem;
+            background: linear-gradient(135deg, #89CFF0, #3b82f6 100%);
+            color: white;
+            /* border-radius: 0 0 20px 20px; */
+        }
+        
+        .avatar {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* 选项列表样式 */
+        .option-list {
+            margin-top: -1.5rem;
+            background-color: var(--bs-body-bg);
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .option-item {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--bs-border-color);
+            transition: background-color 0.2s ease;
+        }
+        
+        .option-item:last-child {
+            border-bottom: none;
+        }
+        
+        .option-item:hover {
+            background-color: var(--bs-tertiary-bg);
+        }
+        
+        .option-icon {
+            width: 24px;
+            margin-right: 1rem;
+            color: #0d6efd;
+        }
+        
+        /* 开关按钮样式优化 */
+        .form-check-input:checked {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+        
+        .form-check-input:focus {
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid p-0">
+        <!-- 个人信息头部 -->
+        <div class="profile-header text-center">
+            <img src="assets/images/kqy.png" alt="用户头像" class="avatar rounded-circle mx-auto mb-3">
+            <h3 class="mb-1">烤全羊KQY</h3>
+            <p class="text-light-opacity-80 small">史上最大大大大大大会员</p>
+        </div>
+        
+        <!-- 功能选项列表 -->
+        <div class="container option-list mt-3">
+            <!-- 暗黑模式选项 -->
+            <div class="option-item d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-moon-stars-fill"></i>&nbsp;&nbsp;
+                    <span>暗黑模式</span>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="darkModeSwitch">
+                </div>
+            </div>
+            
+            <!-- 联系我选项 -->
+            <div class="option-item d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-wechat"></i>&nbsp;&nbsp;
+                    <span>联系我</span>
+                </div>
+                <i class="fas fa-chevron-right text-secondary" style="font-size: 0.8rem;"></i>
+            </div>
+            
+            <!-- 关于选项 -->
+            <div class="option-item d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-info-circle"></i>&nbsp;&nbsp;
+                    <span>关于</span>
+                </div>
+                <i class="fas fa-chevron-right text-secondary" style="font-size: 0.8rem;"></i>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-navbar">
+        <div class="nav-item" data-target="index">
+            <i class="bi bi-2-square-fill"></i>
+            科目二
+        </div>
+        <div class="nav-item" data-target="km3">
+            <i class="bi bi-3-square-fill"></i>
+            科目三
+        </div>
+        <div class="nav-item active" data-target="profile">
+            <i class="bi bi-person-fill"></i>
+            我的
+        </div>
+    </div>
+
+    <!-- 引入Bootstrap5 JS -->
+    <script src="assets/scripts/bootstrap.bundle.min.js"></script>
+    <script>
+        // 暗黑模式切换功能
+        const darkModeSwitch = document.getElementById('darkModeSwitch');
+        const htmlElement = document.documentElement;
+        
+        // 检查本地存储中的偏好设置
+        if (localStorage.getItem('darkMode') === 'true') {
+            htmlElement.setAttribute('data-bs-theme', 'dark');
+            darkModeSwitch.checked = true;
+        }
+        
+        // 切换暗黑模式
+        darkModeSwitch.addEventListener('change', function() {
+            if (this.checked) {
+                htmlElement.setAttribute('data-bs-theme', 'dark');
+                localStorage.setItem('darkMode', 'true');
+            } else {
+                htmlElement.setAttribute('data-bs-theme', 'light');
+                localStorage.setItem('darkMode', 'false');
+            }
+        });
+
+        function createModal() {
+            // 创建模态框外层容器
+            const modalDiv = document.createElement('div');
+            modalDiv.id = 'myModal';
+            modalDiv.className = 'modal fade';
+            modalDiv.tabIndex = '-1';
+            modalDiv.setAttribute('aria-labelledby', 'myModalLabel');
+            modalDiv.setAttribute('aria-hidden', 'true');
+
+            // 模态框内容
+            modalDiv.innerHTML = `
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myModalLabel">关于</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p style="color:white">羊羊驾考——模拟语音播报</p>
+                            <p>该软件暂仅供内部学习使用，严禁外传！</p>
+                            <p>当前版本：v0.4 2025-07-23</p>
+                            <p>By <a href="contact.html">烤全羊KQY (KsuserKqy)</a></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">确定</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // 将模态框添加到body中
+            document.body.appendChild(modalDiv);
+
+            // 返回创建的模态框实例
+            return new bootstrap.Modal(modalDiv);
+        }
+        
+        // 为选项添加点击效果
+        document.querySelectorAll('.option-item').forEach(item => {
+            // 排除暗黑模式选项（因为它有开关）
+            if (!item.querySelector('.form-check')) {
+                item.addEventListener('click', function() {
+                    // 这里可以添加点击跳转逻辑
+                    const text = this.querySelector('span').textContent;
+                    switch (text) {
+                        case "联系我": window.location.href = 'contact.html'; break;
+                        case "关于": {
+                            const infoModal = createModal();
+                            infoModal.show();
+                        }
+                    }
+                });
+            }
+        });
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const target = this.dataset.target;
+                window.location.href = target + ".html";
+            });
+        });
+    </script>
+</body>
+</html>
